@@ -1,0 +1,6 @@
+php artisan make:controller AuthController 
+php artisan make:model Models/Role -m -r
+php artisan make:model Models/UserRole -m -r
+php artisan make:model Models/Group -m -r
+php artisan make:model Models/Task -m -r
+php artisan make:model Models/Log -m
