@@ -26,7 +26,17 @@ class User extends BaseModel implements JWTSubject
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id')->whereDeleted(false);
+    }
+
+    public function groups()
+    {
+        return $this->hasMany(Group::class)->whereDeleted(false);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class)->whereDeleted(false);
     }
 
     public function getJWTIdentifier()

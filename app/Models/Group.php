@@ -42,7 +42,7 @@ class Group extends BaseModel
 
     public function children()
     {
-        return $this->hasMany(Group::class, 'parent_id');
+        return $this->hasMany(Group::class, 'parent_id')->whereDeleted(false);
     }
 
     public function tasks()
