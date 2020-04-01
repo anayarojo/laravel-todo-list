@@ -18,5 +18,33 @@ Route::post('register', 'AuthController@register');
 Route::post('login', 'AuthController@authenticate');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
+
     Route::get('user', 'AuthController@getAuthenticatedUser');
+
+    Route::apiResource('users', 'UserController');
+    Route::apiResource('roles', 'RoleController');
+
+    Route::group(['prefix' => 'users/{user}/roles/{role}'], function (){
+
+        Route::put('add', 'UserRoleController@add');
+        Route::put('quit', 'UserRoleController@quit');
+
+    });
+
+    Route::group(['prefix' => 'lists'], function (){
+
+        Route::get('/{parent?}', 'GroupController@index');
+        Route::post('/{parent?}', 'GroupController@store');
+        Route::get('/{group}', 'GroupController@show');
+        Route::put('/{group}', 'GroupController@update');
+        Route::delete('/{group}', 'GroupController@destroy');
+
+        Route::group(['prefix' => '{group}'], function (){
+
+            Route::apiResource('tasks', 'TaskController');
+
+        });
+
+    });
+
 });
