@@ -11,81 +11,83 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Group|null $group
      * @return \Illuminate\Http\Response
      */
     public function index(Group $group)
     {
-        $groups = Group::whereDeleted(false)->get();
+        $tasks = $group->tasks;
 
         return response()->json([
             'success' => true,
-            'data' => $groups
+            'data' => $tasks
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     * @param Group $group
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Group $group)
     {
-        //
+        $task = $group->tasks()->create($request->all());
+
+        return response()->json([
+            'success' => true,
+            'data' => $task
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Task  $task
+     * @param Group $group
+     * @param  \App\Models\Task $task
      * @return \Illuminate\Http\Response
      */
-    public function show(Task $task)
+    public function show(Group $group, Task $task)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Task $task)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'data' => $task
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Task  $task
+     * @param  \Illuminate\Http\Request $request
+     * @param Group $group
+     * @param  \App\Models\Task $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
+    public function update(Request $request, Group $group, Task $task)
     {
-        //
+        $task->update($request->all());
+
+        return response()->json([
+            'success' => true,
+            'data' => $task
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Task  $task
+     * @param Group $group
+     * @param  \App\Models\Task $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task)
+    public function destroy(Group $group, Task $task)
     {
-        //
+        $task->deleted = true;
+        $task->save();
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

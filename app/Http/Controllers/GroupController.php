@@ -4,17 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class GroupController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param Group|null $parent
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Group $parent = null)
     {
-        $groups = Group::whereDeleted(false)->get();
+        $groups = $parent ?
+            $parent->children :
+            JWTAuth::user()->groups;
 
         return response()->json([
             'success' => true,
@@ -25,12 +29,15 @@ class GroupController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     * @param Group|null $parent
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Group $parent = null)
     {
-        $group = Group::create($request->all());
+        $group = $parent != null ?
+            $parent->children()->create($request->all()) :
+            JWTAuth::user()->groups()->create($request->all());
 
         return response()->json([
             'success' => true,
@@ -55,8 +62,8 @@ class GroupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Group  $group
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\Group $group
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Group $group)
