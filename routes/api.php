@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', 'AuthController@register');
 Route::post('login', 'AuthController@authenticate');
 
+Route::group(['prefix' => 'validate'], function (){
+
+    Route::get('/email/{email}', 'ValidatorController@isEmailAvailable');
+
+});
+
 Route::group(['middleware' => ['jwt.verify']], function() {
 
     Route::get('user', 'AuthController@getAuthenticatedUser');
@@ -40,11 +46,8 @@ Route::group(['middleware' => ['jwt.verify']], function() {
         Route::delete('/{group}', 'GroupController@destroy');
 
         Route::group(['prefix' => '{group}'], function (){
-
             Route::apiResource('tasks', 'TaskController');
-
         });
 
     });
-
 });
