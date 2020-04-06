@@ -18,9 +18,7 @@ Route::post('register', 'AuthController@register');
 Route::post('login', 'AuthController@authenticate');
 
 Route::group(['prefix' => 'validate'], function (){
-
     Route::get('/email/{email}', 'ValidatorController@isEmailAvailable');
-
 });
 
 Route::group(['middleware' => ['jwt.verify']], function() {
@@ -31,10 +29,8 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::apiResource('roles', 'RoleController');
 
     Route::group(['prefix' => 'users/{user}/roles/{role}'], function (){
-
         Route::put('add', 'UserRoleController@add');
         Route::put('quit', 'UserRoleController@quit');
-
     });
 
     Route::group(['prefix' => 'lists'], function (){
