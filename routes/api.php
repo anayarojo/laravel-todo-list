@@ -33,17 +33,23 @@ Route::group(['middleware' => ['jwt.verify']], function() {
         Route::put('quit', 'UserRoleController@quit');
     });
 
+    Route::group(['prefix' => 'categories'], function (){
+        Route::get('/', 'GroupController@index');
+        Route::post('/', 'GroupController@store');
+        Route::get('/{category}', 'GroupController@show');
+        Route::put('/{category}', 'GroupController@update');
+        Route::delete('/{category}', 'GroupController@destroy');
+    });
+
     Route::group(['prefix' => 'lists'], function (){
+        Route::get('/{category?}', 'GroupController@index');
+        Route::post('/{category?}', 'GroupController@store');
+        Route::get('/{list}', 'GroupController@show');
+        Route::put('/{list}', 'GroupController@update');
+        Route::delete('/{list}', 'GroupController@destroy');
 
-        Route::get('/{parent?}', 'GroupController@index');
-        Route::post('/{parent?}', 'GroupController@store');
-        Route::get('/{group}', 'GroupController@show');
-        Route::put('/{group}', 'GroupController@update');
-        Route::delete('/{group}', 'GroupController@destroy');
-
-        Route::group(['prefix' => '{group}'], function (){
+        Route::group(['prefix' => '{list}'], function (){
             Route::apiResource('tasks', 'TaskController');
         });
-
     });
 });

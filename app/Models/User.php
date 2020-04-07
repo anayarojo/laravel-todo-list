@@ -34,6 +34,16 @@ class User extends BaseModel implements JWTSubject
         return $this->hasMany(Group::class)->whereDeleted(false);
     }
 
+    public function categories()
+    {
+        return $this->groups()->whereNull('parent_id');
+    }
+
+    public function lists()
+    {
+        return $this->groups()->whereNotNull('parent_id');
+    }
+
     public function tasks()
     {
         return $this->hasMany(Task::class)->whereDeleted(false);

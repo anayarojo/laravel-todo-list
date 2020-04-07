@@ -45,6 +45,11 @@ class Group extends BaseModel
         return $this->hasMany(Group::class, 'parent_id')->whereDeleted(false);
     }
 
+    public function lists()
+    {
+        return $this->groups()->whereNotNull('parent_id');
+    }
+
     public function tasks()
     {
         return $this->hasMany(Task::class)->whereDeleted(false);
