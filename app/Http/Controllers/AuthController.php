@@ -20,11 +20,14 @@ class AuthController extends Controller
         try {
 
             if (! $token = JWTAuth::attempt($credentials)) {
+
                 return response()->json(['error' => 'invalid_credentials'], 400);
             }
+
             $user = JWTAuth::user();
 
         } catch (JWTException $e) {
+
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
 
@@ -40,6 +43,7 @@ class AuthController extends Controller
         ]);
 
         if($validator->fails()){
+
             return response()->json($validator->errors()->toJson(), 400);
         }
 
@@ -59,20 +63,21 @@ class AuthController extends Controller
         try {
 
             if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['user_not_found'], 404);
+
+                return response()->json(['error' => 'user_not_found'], 404);
             }
 
         } catch (TokenExpiredException $e) {
 
-            return response()->json(['token_expired'], $e->getStatusCode());
+            return response()->json(['error' => 'token_expired'], $e->getStatusCode());
 
         } catch (TokenInvalidException $e) {
 
-            return response()->json(['token_invalid'], $e->getStatusCode());
+            return response()->json(['error' => 'token_invalid'], $e->getStatusCode());
 
         } catch (JWTException $e) {
 
-            return response()->json(['token_absent'], $e->getStatusCode());
+            return response()->json(['error' => 'token_absent'], $e->getStatusCode());
 
         }
 
