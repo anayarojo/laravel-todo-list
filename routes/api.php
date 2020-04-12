@@ -34,19 +34,19 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     });
 
     Route::group(['prefix' => 'categories'], function (){
-        Route::get('/', 'GroupController@index');
-        Route::post('/', 'GroupController@store');
-        Route::get('/{category}', 'GroupController@show');
-        Route::put('/{category}', 'GroupController@update');
-        Route::delete('/{category}', 'GroupController@destroy');
+        Route::get('/', 'CategoryController@index');
+        Route::post('/', 'CategoryController@store');
+        Route::get('/{category}', 'CategoryController@show');
+        Route::put('/{category}', 'CategoryController@update');
+        Route::delete('/{category}', 'CategoryController@destroy');
     });
 
     Route::group(['prefix' => 'lists'], function (){
-        Route::get('/{category?}', 'GroupController@index');
-        Route::post('/{category?}', 'GroupController@store');
-        Route::get('/{list}', 'GroupController@show');
-        Route::put('/{list}', 'GroupController@update');
-        Route::delete('/{list}', 'GroupController@destroy');
+        Route::get('/{category?}', 'ListController@index');
+        Route::post('/{category?}', 'ListController@store');
+        Route::get('/{list}', 'ListController@show');
+        Route::put('/{list}', 'ListController@update');
+        Route::delete('/{list}', 'ListController@destroy');
     });
 
     Route::group(['prefix' => 'tasks'], function (){
