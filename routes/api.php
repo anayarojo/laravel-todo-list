@@ -47,9 +47,13 @@ Route::group(['middleware' => ['jwt.verify']], function() {
         Route::get('/{list}', 'GroupController@show');
         Route::put('/{list}', 'GroupController@update');
         Route::delete('/{list}', 'GroupController@destroy');
+    });
 
-        Route::group(['prefix' => '{list}'], function (){
-            Route::apiResource('tasks', 'TaskController');
-        });
+    Route::group(['prefix' => 'tasks'], function (){
+        Route::get('/{list?}', 'TaskController@index');
+        Route::post('/{list?}', 'TaskController@store');
+        Route::get('/{task}', 'TaskController@show');
+        Route::put('/{task}', 'TaskController@update');
+        Route::delete('/{task}', 'TaskController@destroy');
     });
 });

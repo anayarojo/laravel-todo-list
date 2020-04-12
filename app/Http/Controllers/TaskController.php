@@ -5,18 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param Group|null $group
+     * @param Group|null $list
      * @return \Illuminate\Http\Response
      */
-    public function index(Group $group)
+    public function index(Group $list = null)
     {
-        $tasks = $group->tasks;
+        $tasks = $list != null ?
+            $list->tasks :
+            JWTAuth::user()->lists;
 
         return response()->json([
             'success' => true,
@@ -28,12 +31,14 @@ class TaskController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Group $group
+     * @param Group|null $list
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Group $group)
+    public function store(Request $request, Group $list = null)
     {
-        $task = $group->tasks()->create($request->all());
+        $task = $list != null ?
+            $list->tasks()->create($request->all()) :
+            JWTAuth::user()->tasks()->create($request->all());
 
         return response()->json([
             'success' => true,
@@ -44,11 +49,10 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Group $group
      * @param  \App\Models\Task $task
      * @return \Illuminate\Http\Response
      */
-    public function show(Group $group, Task $task)
+    public function show(Task $task)
     {
         return response()->json([
             'success' => true,
@@ -60,11 +64,10 @@ class TaskController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Group $group
      * @param  \App\Models\Task $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Group $group, Task $task)
+    public function update(Request $request, Task $task)
     {
         $task->update($request->all());
 
@@ -77,11 +80,10 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Group $group
      * @param  \App\Models\Task $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Group $group, Task $task)
+    public function destroy(Task $task)
     {
         $task->deleted = true;
         $task->save();
