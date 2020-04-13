@@ -17,7 +17,7 @@ class TaskController extends Controller
      */
     public function index(Group $list = null)
     {
-        $tasks = $list && $list->id ? $list->tasks : JWTAuth::user()->lists;
+        $tasks = $list && $list->id ? $list->tasks : JWTAuth::user()->tasks;
 
         return response()->json([
             'success' => true,
