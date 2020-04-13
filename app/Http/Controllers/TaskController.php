@@ -17,9 +17,7 @@ class TaskController extends Controller
      */
     public function index(Group $list = null)
     {
-        $tasks = $list != null ?
-            $list->tasks :
-            JWTAuth::user()->lists;
+        $tasks = $list && $list->id ? $list->tasks : JWTAuth::user()->lists;
 
         return response()->json([
             'success' => true,
@@ -36,9 +34,7 @@ class TaskController extends Controller
      */
     public function store(Request $request, Group $list = null)
     {
-        $task = $list != null ?
-            $list->tasks()->create($request->all()) :
-            JWTAuth::user()->tasks()->create($request->all());
+        $task = $list && $list->id ? $list->tasks()->create($request->all()) : JWTAuth::user()->tasks()->create($request->all());
 
         return response()->json([
             'success' => true,

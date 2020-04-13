@@ -10,9 +10,7 @@ class ListController extends Controller
 {
     public function index(Group $category = null)
     {
-        $lists = $category != null ?
-            $category->lists :
-            JWTAuth::user()->lists;
+        $lists = $category && $category->id ? $category->lists : JWTAuth::user()->lists;
 
         return response()->json([
             'success' => true,
@@ -22,9 +20,7 @@ class ListController extends Controller
 
     public function store(Request $request, Group $category = null)
     {
-        $list = $category != null ?
-            $category->lists()->create($request->all()) :
-            JWTAuth::user()->lists()->create($request->all());
+        $list = $category && $category->id ? $category->lists()->create($request->all()) : JWTAuth::user()->lists()->create($request->all());
 
         return response()->json([
             'success' => true,
