@@ -41,7 +41,7 @@ abstract class BaseModel extends Authenticatable
         if (Auth::id())
         {
             $diff = $diff ?: $this->getDiff();
-            return $this->changes()->create([
+            return $this->logs()->create([
                 'user_id' => Auth::id() ?: $userId,
                 'before'  => $diff[ 'before' ],
                 'after'   => $diff[ 'after' ],
